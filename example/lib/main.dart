@@ -4,6 +4,8 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:windows_documents/windows_documents.dart';
 
+const String failString = 'Failed to get documents directory';
+
 void main() {
   runApp(MyApp());
 }
@@ -14,7 +16,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
   String _documentsPath = 'Unknown';
 
   @override
@@ -25,19 +26,11 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
+    String? documentsPath;
     try {
-      platformVersion = await WindowsDocuments.platformVersion;
+      documentsPath = await getDocumentsDirectory();
     } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    String documentsPath;
-    try {
-      documentsPath = await WindowsDocuments.documentsDirectory;
-    } on PlatformException {
-      documentsPath = 'Failed to get documents directory';
+      documentsPath = failString;
     }
 
     // If the widget was removed from the tree while the asynchronous platform
@@ -46,8 +39,7 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
 
     setState(() {
-      _platformVersion = platformVersion;
-      _documentsPath = documentsPath;
+      _documentsPath = documentsPath ?? failString;
     });
   }
 
@@ -59,7 +51,7 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Text('Running on: $_platformVersion\nDocuments Path: $_documentsPath'),
+          child: Text('Documents Path: $_documentsPath'),
         ),
       ),
     );

@@ -1,7 +1,8 @@
 name: windows_documents
 description: Provides a document directory path for Windows
 version: 1.0.0
-author: Leon Tappe <ltappe@mail.upb.de>
+authors:
+ - Leon Tappe <ltappe@mail.upb.de>
 repository: https://github.com/leontappe/flutter_windows_documents.git
 homepage: https://github.com/leontappe/flutter_windows_documents
 
